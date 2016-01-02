@@ -8,10 +8,10 @@ module TransitStyle
 {-| Animations for elm-transit, to be used on elm-html `style` attribute.
 
     div
-      [ style (fadeSlideLeft 100 model) ]
-      [ text "content" ]
+      [ style (fadeSlideLeft 100 model.transition) ]
+      [ text "Some content" ]
 
-# Compositions
+# Combinations
 @docs fadeSlideLeft
 
 # Slide left
@@ -25,54 +25,11 @@ module TransitStyle
 -}
 
 import Transit exposing (..)
+import Easing exposing (..)
 
 
-{-| Alias for elm-html style value -}
+{-| Just an alias for elm-html style value -}
 type alias Style = List (String, String)
-
-
-{-| Compose fade and slideLeft with the specified offset -}
-fadeSlideLeft : Float -> Transition -> Style
-fadeSlideLeft offset m =
-  (slideLeft offset m) ++ (fade m)
-
-
-{-| Slide left animation, with the specified offset -}
-slideLeft : Float -> Transition -> Style
-slideLeft offset m =
-  compose (slideOutLeft offset) (slideInLeft offset) m
-
-
-{-| Slide out to left (exit) -}
-slideOutLeft : Float -> Float -> Style
-slideOutLeft offset v =
-  [ ("transform", "translateX(" ++ toString (-v * offset) ++ "px)")
-  ]
-
-
-{-| Slide in to left -}
-slideInLeft : Float -> Float -> Style
-slideInLeft offset v =
-  [ ("transform", "translateX(" ++ toString (offset - v * offset) ++ "px)")
-  ]
-
-
-{-| Fade out/in animation -}
-fade : Transition -> Style
-fade m =
-  compose fadeOut fadeIn m
-
-
-{-| Fade out -}
-fadeOut : Float -> Style
-fadeOut v =
-  [ ("opacity", toString (1 - v)) ]
-
-
-{-| Fade in -}
-fadeIn : Float -> Style
-fadeIn v =
-  [ ("opacity", toString v) ]
 
 
 {-| Compose an animation with `exit` and `enter` phases. -}
@@ -85,3 +42,76 @@ compose exit enter transition =
       enter v
     _ ->
       []
+
+
+{-| Combine fade and slideLeft with the specified offset -}
+fadeSlideLeft : Float -> Transition -> Style
+fadeSlideLeft offset t =
+  (slideLeft offset t) ++ (fade t)
+
+
+{-| Slide left animation, with the specified offset -}
+slideLeft : Float -> Transition -> Style
+slideLeft offset =
+  compose (slideOutLeft offset) (slideInLeft offset)
+
+
+{-| Slide out to left -}
+slideOutLeft : Float -> Float -> Style
+slideOutLeft offset v =
+  easeInCubic1 0 -offset v
+    |> translateX
+
+
+{-| Slide in to left -}
+slideInLeft : Float -> Float -> Style
+slideInLeft offset v =
+  easeOutCubic1 offset 0 v
+    |> translateX
+
+
+{-| Fade animation -}
+fade : Transition -> Style
+fade =
+  compose fadeOut fadeIn
+
+
+{-| Fade out -}
+fadeOut : Float -> Style
+fadeOut v =
+  easeInCubic1 1 0 v
+    |> opacity
+
+
+{-| Fade in -}
+fadeIn : Float -> Style
+fadeIn v =
+  easeOutCubic1 0 1 v
+    |> opacity
+
+
+-- CSS styles
+
+{-| Opacity style -}
+opacity : Float -> Style
+opacity v =
+  [ ("opacity", toString v) ]
+
+{-| translateX style -}
+translateX : Float -> Style
+translateX v =
+  [ ("transform", "translateX(" ++ toString v ++ "px)")
+  ]
+
+
+-- easings (private)
+
+easeOutCubic1 : Float -> Float -> Float -> Float
+easeOutCubic1 from to =
+  ease easeOutCubic float from to 1
+
+
+easeInCubic1 : Float -> Float -> Float -> Float
+easeInCubic1 from to =
+  ease easeInCubic float from to 1
+

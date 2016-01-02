@@ -1,10 +1,13 @@
 # Elm Transit Style
 
-Animations for elm-transit, to be used on elm-html `style` attribute. At the moment we have those, but it's easy to add more:
+    elm package install etaque/elm-transit-style
+
+Animations for elm-transit, to be used on elm-html `style` attribute. At the moment we have those, though it's easy to add more:
 
 * `fade`
 * `slideLeft`
 * `fadeSlideLeft`
+
 
 ## How it works
 
@@ -25,3 +28,7 @@ It can then be used on a transition. Example for fade and left slide animation, 
     [ style (TransitStyle.fadeSlideLeft 100 model.transition) ]
     [ text "Some content" ]
 ```
+
+## Credits
+
+* Easings are backed by [Easing](http://package.elm-lang.org/packages/Dandandan/Easing/latest) package.
