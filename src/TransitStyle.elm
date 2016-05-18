@@ -33,7 +33,7 @@ type alias Style = List (String, String)
 
 
 {-| Compose an animation with `exit` and `enter` phases. -}
-compose : (Float -> Style) -> (Float -> Style) -> Transition a -> Style
+compose : (Float -> Style) -> (Float -> Style) -> Transition -> Style
 compose exit enter transition =
   case (getStep transition, getValue transition) of
     (Exit, v) ->
@@ -45,7 +45,7 @@ compose exit enter transition =
 
 
 {-| Combine fade and slideLeft with the specified offset -}
-fadeSlide : Float -> Transition a -> Style
+fadeSlide : Float -> Transition -> Style
 fadeSlide offset t =
   (slide offset t) ++ (fade t)
 
@@ -53,7 +53,7 @@ fadeSlide offset t =
 {-| Slide animation, with the specified offset.
 Greater than 0 to right, lesser to left.
 -}
-slide : Float -> Transition a -> Style
+slide : Float -> Transition -> Style
 slide offset =
   compose (slideOut offset) (slideIn offset)
 
@@ -73,7 +73,7 @@ slideIn offset v =
 
 
 {-| Fade animation -}
-fade : Transition a -> Style
+fade : Transition -> Style
 fade =
   compose fadeOut fadeIn
 
