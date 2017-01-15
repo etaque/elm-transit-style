@@ -39,7 +39,7 @@ It can then be used on a transition. Example for fade and left slide animation, 
 Example for fade and zoom animation with a 5% offset:
 ```elm
   div
-    [ style (TransitStyle.fadeZoom 0.5 model.transition) ]
+    [ style (TransitStyle.fadeZoom 0.05 model.transition) ]
     [ text "Some content" ]
 ```
 
