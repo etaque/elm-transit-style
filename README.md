@@ -5,8 +5,10 @@
 HTML animations for [elm-transit](http://package.elm-lang.org/packages/etaque/elm-transit/latest)'s `Transition`, to be used on elm-html `style` attribute. At the moment we have those, though it's easy to add more:
 
 * `fade`
-* `slideLeft`
-* `fadeSlideLeft`
+* `slide`
+* `zoom`
+* `fadeSlide`
+* `fadeZoom`
 
 An ideal companion to [elm-transit-router](http://package.elm-lang.org/packages/etaque/elm-transit-router/latest).
 
@@ -30,7 +32,14 @@ It can then be used on a transition. Example for fade and left slide animation, 
 
 ```elm
   div
-    [ style (TransitStyle.fadeSlideLeft 100 model.transition) ]
+    [ style (TransitStyle.fadeSlide 100 model.transition) ]
+    [ text "Some content" ]
+```
+
+Example for fade and zoom animation with a 5% offset:
+```elm
+  div
+    [ style (TransitStyle.fadeZoom 0.05 model.transition) ]
     [ text "Some content" ]
 ```
 

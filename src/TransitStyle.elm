@@ -1,6 +1,7 @@
 module TransitStyle
     exposing
         ( fadeSlide
+        , fadeZoom
         , slide
         , slideOut
         , slideIn
@@ -8,6 +9,9 @@ module TransitStyle
         , fadeOut
         , fadeIn
         , compose
+        , zoom
+        , zoomIn
+        , zoomOut
         , Style
         )
 
@@ -17,14 +21,21 @@ module TransitStyle
       [ style (fadeSlide 100 model.transition) ]
       [ text "Some content" ]
 
+    div
+      [ style (fadeZoom 0.05 model.transition) ]
+      [ text "Some content" ]
+
 # Combinations
-@docs fadeSlide
+@docs fadeSlide, fadeZoom
 
 # Slide left
 @docs slide, slideOut, slideIn
 
 # Fade
 @docs fade, fadeOut, fadeIn
+
+# Zoom
+@docs zoom, zoomIn, zoomOut
 
 # Tooling to create animations
 @docs compose, Style
@@ -62,6 +73,13 @@ fadeSlide offset t =
     (slide offset t) ++ (fade t)
 
 
+{-| Combine fade and zoom with specified offset
+-}
+fadeZoom : Float -> Transition -> Style
+fadeZoom offset t =
+    ( zoom offset t ) ++ ( fade t )
+
+
 {-| Slide animation, with the specified offset.
 Greater than 0 to right, lesser to left.
 -}
@@ -86,6 +104,30 @@ slideIn offset v =
     (Ease.inCubic (1 - v))
         * offset
         |> translateX
+
+
+-- Zoom animations
+{-| Zoom animation
+-}
+zoom : Float -> Transition -> Style
+zoom offset =
+    compose ( zoomOut offset ) ( zoomIn offset )
+
+
+{-| Zoom in (enter)
+-}
+zoomIn : Float -> Float -> Style
+zoomIn offset v =
+    Ease.linear ( ( v * offset ) + ( 1 - offset ) )
+        |> scaleXY
+
+
+{-| Zoom out (exit)
+-}
+zoomOut : Float -> Float -> Style
+zoomOut offset v =
+    Ease.inCubic ( ( v * offset ) + ( 1 - offset ) )
+        |> scaleXY
 
 
 {-| Fade animation
@@ -128,3 +170,20 @@ translateX : Float -> Style
 translateX v =
     [ ( "transform", "translateX(" ++ toString v ++ "px)" )
     ]
+
+
+{-| Scale style
+-}
+scaleXY : Float -> Style
+scaleXY v =
+    let
+        target =
+            String.concat
+                [ "scale("
+                , toString v
+                , ","
+                , toString v
+                , ")"
+                ]
+    in
+        [ ( "transform", target ) ]
