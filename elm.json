@@ -1,0 +1,18 @@
+{
+    "type": "package",
+    "name": "etaque/elm-transit-style",
+    "summary": "CSS styles for animation on elm-transit.",
+    "license": "BSD-3-Clause",
+    "version": "3.1.0",
+    "exposed-modules": [
+        "TransitStyle"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+        "elm/core": "1.0.0 <= v < 2.0.0",
+        "elm/html": "1.0.0 <= v < 2.0.0",
+        "elm-community/easing-functions": "2.0.0 <= v < 3.0.0",
+        "etaque/elm-transit": "7.0.5 <= v < 8.0.0"
+    },
+    "test-dependencies": {}
+}
