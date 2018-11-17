@@ -3,7 +3,7 @@
     "name": "etaque/elm-transit-style",
     "summary": "CSS styles for animation on elm-transit.",
     "license": "BSD-3-Clause",
-    "version": "4.0.1",
+    "version": "4.0.0",
     "exposed-modules": [
         "TransitStyle"
     ],
